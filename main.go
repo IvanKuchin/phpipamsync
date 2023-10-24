@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/ivankuchin/phpipamsync/internal/cmd"
 	"github.com/ivankuchin/phpipamsync/internal/config_reader"
 )
 
@@ -18,4 +19,5 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
+	cmd.Execute()
 }
