@@ -1,8 +1,9 @@
-package cmd
+package cli
 
 import (
 	"fmt"
 
+	"github.com/ivankuchin/phpipamsync/internal/config_reader"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +18,7 @@ var getDevicesCmd = &cobra.Command{
 	Short: "Get DHCP config for Cisco IOS devices",
 	Long:  "Get DHCP config for Cisco IOS devices",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add code here to get DHCP config for Cisco IOS devices")
+		fmt.Println("add code here to get DHCP config for Cisco IOS devices", config_reader.Cfg)
 		// err := apiclient.Login(config_reader.Cfg)
 		// 	if err != nil {
 		// 		os.Exit(1)
