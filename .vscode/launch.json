@@ -11,6 +11,14 @@
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/phpipamsync/main.go",
             "args": ["get", "cisco-dhcp"]
+        },
+        {
+            "name": "get pi-hole",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/phpipamsync/main.go",
+            "args": ["get", "pi-hole"]
         }
-    ]
+     ]
 }
