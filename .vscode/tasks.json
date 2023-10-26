@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "go",
+			"label": "go: build package",
+			"command": "build",
+			"args": [
+				"${workspaceFolder}/cmd/phpipamsync/"
+			],
+			"problemMatcher": [
+				"$go"
+			],
+			"group": "build",
+			// "detail": "cd e:\\docs\\src\\go\\sdwanctl; go build ${workspaceFolder}"
+		},
+		{
+			"type": "go",
+			"label": "go: build package for linux",
+			"command": "build",
+			"args": [
+				"-o", "cmd/phpipamsync", "${workspaceFolder}/cmd/phpipamsync/"
+			],
+			"problemMatcher": [
+				"$go"
+			],
+			"options": {
+				"env": {
+					"GOOS": "linux",
+					"GOARCH": "amd64"
+				}
+			},
+			"group": "build",
+			// "detail": "cd e:\\docs\\src\\go\\sdwanctl; go build -o cmd/sdwanctl-linux ${workspaceFolder}"
+		},
+		{
+			"label": "test task",
+			"type": "shell",
+			"command": "go build -o cmd/sdwanctl-linux ${workspaceFolder}",
+			"group": "build"
+		},		
+	]
+}
