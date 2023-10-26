@@ -33,11 +33,5 @@
 			"group": "build",
 			// "detail": "cd e:\\docs\\src\\go\\sdwanctl; go build -o cmd/sdwanctl-linux ${workspaceFolder}"
 		},
-		{
-			"label": "test task",
-			"type": "shell",
-			"command": "go build -o cmd/sdwanctl-linux ${workspaceFolder}",
-			"group": "build"
-		},		
 	]
 }
