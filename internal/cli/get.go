@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getSubnetID(client api_client.ApiClientAuthenticator, cfg *config_reader.Config) (int, error) {
+func getSubnetID(client api_client.Authenticator, cfg *config_reader.Config) (int, error) {
 	subnet_id := 0
 	subnet_json, err := client.Call("GET", cfg.Ipam_site_url+"/api/"+cfg.Ipam_app_id+"/subnets/cidr/"+cfg.Ipam_subnet, "")
 	if err != nil {
@@ -34,7 +34,7 @@ func getSubnetID(client api_client.ApiClientAuthenticator, cfg *config_reader.Co
 	return subnet_id, nil
 }
 
-func getIPAddressesBySubnetID(subnetID int, client api_client.ApiClientAuthenticator, cfg *config_reader.Config) (IPAddresses, error) {
+func getIPAddressesBySubnetID(subnetID int, client api_client.Authenticator, cfg *config_reader.Config) (IPAddresses, error) {
 	addresses := IPAddresses{}
 
 	addresses_json, err := client.Call("GET", cfg.Ipam_site_url+"/api/"+cfg.Ipam_app_id+"/subnets/"+strconv.Itoa(subnetID)+"/addresses/", "")
