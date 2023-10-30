@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 
 	"github.com/ivankuchin/phpipamsync/internal/api_client"
@@ -55,16 +56,35 @@ func getPiHoleCustomOutput(addresses IPAddresses, cfg *config_reader.Config) str
 	output := ""
 
 	for _, address := range addresses.IPAddresses {
-		if address.Hostname == "" {
-			log.Printf("WARNING: Skipping %s because hostname is empty", address.IP)
-		} else if address.IP == "" {
-			log.Printf("WARNING: Skipping %s because IP is empty", address.Hostname)
-		} else {
-			output += address.IP + " " + address.Hostname + "." + cfg.Domain + "\n"
+		switch address.Tag {
+		case "2": // In Use
+			if address.Hostname == "" {
+				log.Printf("WARNING: Skipping %s because hostname is empty", address.IP)
+			} else if address.IP == "" {
+				log.Printf("WARNING: Skipping %s because IP is empty", address.Hostname)
+			} else {
+				output += address.IP + " " + address.Hostname + "." + cfg.Domain + "\n"
+			}
+		case "3": // Reserved
+		case "4": // DHCP pool
+		default:
+			log.Printf("WARNING: Skipping %s because tag is %s", address.IP, address.Tag)
 		}
 	}
 
 	return output
+}
+
+func writeToPiHoleCustom(addresses string, cfg *config_reader.Config) error {
+
+	// write string "addresses" to a file
+	err := os.WriteFile(cfg.Pi_hole, []byte(addresses), 0644)
+	if err != nil {
+		log.Printf("ERROR writing to file: %s", err.Error())
+		return err
+	}
+
+	return nil
 }
 
 var getCmd = &cobra.Command{
@@ -96,7 +116,7 @@ var getCiscoDHCP = &cobra.Command{
 			return err
 		}
 
-		log.Println(addresses)
+		fmt.Println(addresses)
 
 		return nil
 	},
@@ -127,7 +147,10 @@ var getPiHoleCustom = &cobra.Command{
 
 		output := getPiHoleCustomOutput(addresses, config_reader.Cfg)
 
-		fmt.Println(output)
+		err = writeToPiHoleCustom(output, config_reader.Cfg)
+		if err != nil {
+			return err
+		}
 
 		return nil
 	},
