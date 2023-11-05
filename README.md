@@ -2,7 +2,7 @@
 
 Small script synchronizes phpipam hosts with pi-hole resolvers. 
 
-## Usecase
+## Use case
 
 Phpipam considered source of truth for DNS resolution. Network admins create hostnames in phpipam. 
 Pihole used as a DNS-server. 
