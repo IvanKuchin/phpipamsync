@@ -1,4 +1,3 @@
-cmd/
 go.sum
 swagger*
 __debug_bin
