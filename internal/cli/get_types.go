@@ -34,4 +34,5 @@ type IPAddress struct {
 	FirewallAddressObject string `json:"firewallAddressObject"`
 	EditDate              string `json:"editDate"`
 	CustomerID            string `json:"customer_id"`
+	ClientIdentifier      string `json:"custom_ClientID"`
 }

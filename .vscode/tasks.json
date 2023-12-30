@@ -8,18 +8,26 @@
 			"args": [
 				"${workspaceFolder}/cmd/phpipamsync/"
 			],
+			"options": {
+				"env": {
+					"GOOS": "windows",
+					"GOARCH": "amd64"
+				},
+				"cwd": "${workspaceFolder}"
+			},
 			"problemMatcher": [
 				"$go"
 			],
-			"group": "build",
-			// "detail": "cd e:\\docs\\src\\go\\sdwanctl; go build ${workspaceFolder}"
+			"group": "build"
 		},
 		{
 			"type": "go",
 			"label": "go: build package for linux",
 			"command": "build",
 			"args": [
-				"-o", "cmd/phpipamsync", "${workspaceFolder}/cmd/phpipamsync/"
+				"-o",
+				"cmd/phpipamsync",
+				"${workspaceFolder}/cmd/phpipamsync/"
 			],
 			"problemMatcher": [
 				"$go"
@@ -30,8 +38,7 @@
 					"GOARCH": "amd64"
 				}
 			},
-			"group": "build",
-			// "detail": "cd e:\\docs\\src\\go\\sdwanctl; go build -o cmd/sdwanctl-linux ${workspaceFolder}"
+			"group": "build"
 		},
 	]
 }
