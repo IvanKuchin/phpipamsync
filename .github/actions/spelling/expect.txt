@@ -4,6 +4,7 @@ ALIGNV
 AZN
 Airfarelimitation
 Anyconnect
+Atoi
 Autoapprove
 Autodetect
 BGN
@@ -29,11 +30,14 @@ DKK
 Dest
 EUR
 Econom
+Errorf
 FFFFFFF
 FILLPATTERN
 FNumber
+Fatalf
 Flawfinder
 GBP
+GWIPBy
 HDR
 HKD
 HTMLTo
@@ -45,6 +49,7 @@ IMAGEMAGICK
 IMessage
 INR
 Img
+Itoa
 JPY
 KGS
 KRW
@@ -53,6 +58,9 @@ LEN
 LIGHTGREEN
 LOGDIR
 LOGGEDIN
+Lmicroseconds
+Lshortfile
+Lstd
 MDL
 MSVC
 Magick
@@ -62,8 +70,11 @@ ONMe
 ORBT
 PLN
 PSo
+Printf
+Println
 REFERER
 RON
+Rignore
 SEK
 SIGSEGV
 SOWIn
@@ -78,6 +89,7 @@ UAH
 UINT
 UNICODE
 UZS
+Unmarshal
 Unsubscribe
 Uread
 WAct
@@ -117,6 +129,8 @@ airtickets
 alnum
 anketa
 anyrole
+api
+args
 arial
 arialbd
 autocomplete
@@ -134,11 +148,13 @@ cactivator
 captcha
 ccgi
 cexception
+cfg
 cgi
 charcode
 checkin
 checkpersistence
 chtml
+cidr
 cmail
 cmake
 cmath
@@ -165,6 +181,7 @@ datetime
 dayrate
 declensioned
 deinit
+dhcp
 difftime
 downloader
 dst
@@ -181,12 +198,15 @@ executables
 exif
 expenseitemid
 fcntl
+filepath
 foreach
 fstream
 func
 getenv
 gettext
 gettimeofday
+github
+gopkg
 helpdesk
 hostname
 hotelchain
@@ -201,16 +221,19 @@ idto
 idx
 ifndef
 imageid
+ipam
 isactivated
 isblocked
 isbn
 iswalnum
+ivankuchin
 jpg
 json
 jsonrpc
 keepalive
 kompanii
 kpp
+len
 libhpdf
 libintl
 libxl
@@ -230,6 +253,7 @@ multiwork
 mysql
 myvacancies
 namespace
+netip
 ngettext
 noexcept
 noone
@@ -255,6 +279,8 @@ passwd
 paymenttype
 pdf
 pfb
+php
+phpipamsync
 pragma
 prettywriter
 pricedomestic
@@ -262,6 +288,7 @@ priceforeign
 proj
 projectid
 psow
+ptr
 qfp
 qstring
 rapidjson
@@ -284,6 +311,7 @@ smth
 snmp
 snprintf
 spam
+spf
 sql
 sqlquery
 srand
@@ -296,6 +324,7 @@ stdexcept
 stoi
 stol
 stopbits
+strconv
 strftime
 strlen
 subc
@@ -313,6 +342,7 @@ timeframe
 timeinfo
 timereport
 timeval
+tls
 tmp
 tooltip
 topage
@@ -326,6 +356,7 @@ typedefs
 uncomment
 undef
 uniq
+unmarshalling
 url
 usec
 userid
@@ -353,4 +384,6 @@ xls
 xml
 xxxx
 xxxxxxxx
+yaml
+ycr
 youtube
