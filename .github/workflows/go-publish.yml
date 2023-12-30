@@ -39,21 +39,21 @@ jobs:
 
     - name: Linux build
       run: |
-        go build -o cmd/${{ github.event.repository.name }} ./cmd/config-mapper/
+        go build -o cmd/${{ github.event.repository.name }} ./cmd/${{ github.event.repository.name }}/
         cd ./cmd
         tar -czf ${{ github.event.repository.name }}-linux-${{ github.event.release.tag_name }}.tar.gz ./${{ github.event.repository.name }}
         rm ./${{ github.event.repository.name }}
 
     - name: Windows build
       run: |
-        GOOS=windows GOARCH=amd64 go build -o cmd/${{ github.event.repository.name }}.exe ./cmd/config-mapper/
+        GOOS=windows GOARCH=amd64 go build -o cmd/${{ github.event.repository.name }}.exe ./cmd/${{ github.event.repository.name }}/
         cd ./cmd
         zip ${{ github.event.repository.name }}-windows-${{ github.event.release.tag_name }}.zip ./${{ github.event.repository.name }}.exe
         rm ./${{ github.event.repository.name }}.exe
 
     - name: Darwin build
       run: |
-        GOOS=darwin GOARCH=amd64 go build -o cmd/${{ github.event.repository.name }} ./cmd/config-mapper/
+        GOOS=darwin GOARCH=amd64 go build -o cmd/${{ github.event.repository.name }} ./cmd/${{ github.event.repository.name }}/
         cd ./cmd
         tar -czf ${{ github.event.repository.name }}-darwin-${{ github.event.release.tag_name }}.tar.gz ./${{ github.event.repository.name }}
         rm ./${{ github.event.repository.name }}
