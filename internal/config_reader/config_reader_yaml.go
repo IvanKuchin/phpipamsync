@@ -11,7 +11,7 @@ import (
 type YAMLConfigReader struct {
 }
 
-func (ycr *YAMLConfigReader) GetConfig() (*Config, error) {
+func (config_reader *YAMLConfigReader) GetConfig() (*Config, error) {
 	home_dir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("ERROR: %v\n", err.Error())

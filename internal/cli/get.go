@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
+	"net/netip"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/ivankuchin/phpipamsync/internal/api_client"
 	"github.com/ivankuchin/phpipamsync/internal/config_reader"
@@ -87,6 +90,91 @@ func writeToPiHoleCustom(addresses string, cfg *config_reader.Config) error {
 	return nil
 }
 
+func getSubnetMaskBySubnetID(subnetID string) (string, error) {
+	mask := ""
+
+	prefix, err := netip.ParsePrefix(subnetID)
+	if err != nil {
+		log.Printf("Error parsing subnet ID: %s", err.Error())
+		return mask, err
+	}
+
+	bits := prefix.Bits()
+	mask = net.IP(net.CIDRMask(bits, 32)).String()
+
+	return mask, nil
+}
+
+func getGWIPBySubnetID(subnetID string) (string, error) {
+	ip_addr := ""
+
+	prefix, err := netip.ParsePrefix(subnetID)
+	if err != nil {
+		log.Printf("Error parsing subnet ID: %s", err.Error())
+		return ip_addr, err
+	}
+
+	ip_addr = prefix.Addr().Next().String()
+
+	return ip_addr, nil
+}
+
+func convertMacToClientIdentifier(mac string) string {
+	cleaned_mac := strings.ReplaceAll(mac, ":", "")
+	client_identifier := ""
+
+	for i := 0; i < len(cleaned_mac); i++ {
+		if (i-2)%4 == 0 {
+			client_identifier += "."
+		}
+		client_identifier += string(cleaned_mac[i])
+	}
+
+	return "01" + client_identifier
+}
+
+func getCiscoDHCPOutput(addresses IPAddresses, cfg *config_reader.Config) (string, error) {
+	output := ""
+
+	mask, err := getSubnetMaskBySubnetID(cfg.Ipam_subnet)
+	if err != nil {
+		return output, err
+	}
+
+	gw, err := getGWIPBySubnetID(cfg.Ipam_subnet)
+	if err != nil {
+		return output, err
+	}
+
+	for _, address := range addresses.IPAddresses {
+		switch address.Tag {
+		case "2": // In Use
+			if address.Hostname == "" {
+				log.Printf("WARNING: Skipping %s because hostname is empty", address.IP)
+			} else if address.IP == "" {
+				log.Printf("WARNING: Skipping %s because IP is empty", address.Hostname)
+			} else {
+				output += "ip dhcp pool " + address.Hostname + "\n"
+				output += " host " + address.IP + " " + mask + "\n"
+				switch {
+				case address.ClientIdentifier != "":
+					output += " client-identifier " + address.ClientIdentifier + "\n"
+				case address.Mac != "":
+					output += " client-identifier " + convertMacToClientIdentifier(address.Mac) + "\n"
+				}
+				output += " default-router " + gw + "\n"
+				output += "!\n"
+			}
+		case "3": // Reserved
+		case "4": // DHCP pool
+		default:
+			log.Printf("WARNING: Skipping %s because tag is %s", address.IP, address.Tag)
+		}
+	}
+
+	return output, nil
+}
+
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get information from phpIPAM",
@@ -99,24 +187,29 @@ var getCiscoDHCP = &cobra.Command{
 	Long:  "Get DHCP config for Cisco IOS devices",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		auth := new(api_client.AuthAppCode)
+		auth := api_client.AuthAppCode{}
 		err := auth.Login(config_reader.Cfg)
 		if err != nil {
 			return err
 		}
 		defer auth.Logout()
 
-		subnet_id, err := getSubnetID(auth, config_reader.Cfg)
+		subnet_id, err := getSubnetID(&auth, config_reader.Cfg)
 		if err != nil {
 			return err
 		}
 
-		addresses, err := getIPAddressesBySubnetID(subnet_id, auth, config_reader.Cfg)
+		addresses, err := getIPAddressesBySubnetID(subnet_id, &auth, config_reader.Cfg)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println(addresses)
+		output, err := getCiscoDHCPOutput(addresses, config_reader.Cfg)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println(output)
 
 		return nil
 	},
