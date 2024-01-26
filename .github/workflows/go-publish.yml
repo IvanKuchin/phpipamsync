@@ -25,7 +25,7 @@ jobs:
         step: start
         token: ${{ secrets.GITHUB_TOKEN }}
         env: release
-        desc: "depl_id: ${{ github.event.deployment.id }}, ref_id: ${{ github.head_ref }}"
+        desc: "release name: ${{ github.event.release.name }}, ref_id: ${{ github.head_ref }}"
         
     - uses: actions/checkout@v4
 
