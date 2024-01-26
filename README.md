@@ -22,7 +22,9 @@ Location ~/.phpipamsync/config
 ipam_site_url: https://192.168.169.170:8670/                    # IP and port where phpipam exposes API endpoints
 ipam_app_id: phpipamsync                                        # phpipam app id
 ipam_app_code: AVyzJl7ceWJ5WrbKZ1QjAIgNdMSggw12                 # phpipam app code
-ipam_subnet: 192.168.168.0/24                                   # ipam subnet to synchronize
+ipam_subnets:                                                   # ipam subnets to synchronize
+- 192.168.250.0/24
+- 192.168.251.0/24
 
 domain: home                                                    # domain to add to hostnames. For example (home will add .home to all hostnames)
 pi_hole: /home/ikuchin/docker/pi.hole/etc-pihole/custom.list    # full path to pi-hole custom.list file 
