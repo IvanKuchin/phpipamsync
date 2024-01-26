@@ -49,23 +49,23 @@ To generate DHCP config snippet for Cisco router configuration
 phpipamsync get cisco-dhpc
 ```
 
-Once snippet generated it can be copy/paste-ed to actual router configuration. There is no integration between phpipamsync and router.
+Once snippet generated it can be copy/paste-ed to the actual router configuration. There is no integration between phpipamsync and router.
 
 ## Examples
 
 ### DNS resolution
 
 ```
-e:\docs\src\go\phpipamsync>nslookup tesla.home
+e:\docs\src\go\phpipamsync>nslookup fridge.home
 ...
 Non-authoritative answer:
-Name:    tesla.home
-Address:  192.168.168.49
+Name:    fridge.home
+Address:  192.168.251.13
 
-e:\docs\src\go\phpipamsync>nslookup 192.168.168.49
+e:\docs\src\go\phpipamsync>nslookup 192.168.251.13
 ...
-Name:    tesla.home
-Address:  192.168.168.49
+Name:    fridge.home
+Address:  192.168.251.13
 ```
 
 ### Cisco IOS DHCP config
