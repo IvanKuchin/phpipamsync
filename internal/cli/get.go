@@ -15,9 +15,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getSubnetID(client api_client.Authenticator, cfg *config_reader.Config) (int, error) {
+func getSubnetID(client api_client.Authenticator, cfg *config_reader.Config, subnet string) (int, error) {
 	subnet_id := 0
-	subnet_json, err := client.Call("GET", cfg.Ipam_site_url+"/api/"+cfg.Ipam_app_id+"/subnets/cidr/"+cfg.Ipam_subnet, "")
+	subnet_json, err := client.Call("GET", cfg.Ipam_site_url+"/api/"+cfg.Ipam_app_id+"/subnets/cidr/"+subnet, "")
 	if err != nil {
 		return subnet_id, err
 	}
@@ -52,6 +52,28 @@ func getIPAddressesBySubnetID(subnetID int, client api_client.Authenticator, cfg
 		return addresses, err
 	}
 
+	return addresses, nil
+}
+
+func getIPAddressesBelongsToSubnets(client api_client.Authenticator, cfg *config_reader.Config) (IPAddresses, error) {
+
+	addresses := IPAddresses{}
+
+	for _, subnet := range cfg.Ipam_subnets {
+
+		subnet_id, err := getSubnetID(client, config_reader.Cfg, subnet)
+		if err != nil {
+			return addresses, err
+		}
+
+		addresses_temp, err := getIPAddressesBySubnetID(subnet_id, client, config_reader.Cfg)
+		if err != nil {
+			return addresses, err
+		}
+
+		addresses.IPAddresses = append(addresses.IPAddresses, addresses_temp.IPAddresses...)
+
+	}
 	return addresses, nil
 }
 
@@ -133,15 +155,15 @@ func convertMacToClientIdentifier(mac string) string {
 	return "01" + client_identifier
 }
 
-func getCiscoDHCPOutput(addresses IPAddresses, cfg *config_reader.Config) (string, error) {
+func getCiscoDHCPOutputBySubnet(addresses IPAddresses, subnet string) (string, error) {
 	output := ""
 
-	mask, err := getSubnetMaskBySubnetID(cfg.Ipam_subnet)
+	mask, err := getSubnetMaskBySubnetID(subnet)
 	if err != nil {
 		return output, err
 	}
 
-	gw, err := getGWIPBySubnetID(cfg.Ipam_subnet)
+	gw, err := getGWIPBySubnetID(subnet)
 	if err != nil {
 		return output, err
 	}
@@ -175,6 +197,32 @@ func getCiscoDHCPOutput(addresses IPAddresses, cfg *config_reader.Config) (strin
 	return output, nil
 }
 
+func getCiscoDHCPOutput(client api_client.Authenticator, cfg *config_reader.Config) (string, error) {
+	output := ""
+
+	for _, subnet := range cfg.Ipam_subnets {
+
+		subnet_id, err := getSubnetID(client, config_reader.Cfg, subnet)
+		if err != nil {
+			return "", err
+		}
+
+		addresses, err := getIPAddressesBySubnetID(subnet_id, client, config_reader.Cfg)
+		if err != nil {
+			return "", err
+		}
+
+		temp_output, err := getCiscoDHCPOutputBySubnet(addresses, subnet)
+		if err != nil {
+			return "", err
+		}
+
+		output += temp_output
+	}
+
+	return output, nil
+}
+
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get information from phpIPAM",
@@ -194,17 +242,7 @@ var getCiscoDHCP = &cobra.Command{
 		}
 		defer auth.Logout()
 
-		subnet_id, err := getSubnetID(&auth, config_reader.Cfg)
-		if err != nil {
-			return err
-		}
-
-		addresses, err := getIPAddressesBySubnetID(subnet_id, &auth, config_reader.Cfg)
-		if err != nil {
-			return err
-		}
-
-		output, err := getCiscoDHCPOutput(addresses, config_reader.Cfg)
+		output, err := getCiscoDHCPOutput(&auth, config_reader.Cfg)
 		if err != nil {
 			return err
 		}
@@ -228,12 +266,7 @@ var getPiHoleCustom = &cobra.Command{
 		}
 		defer auth.Logout()
 
-		subnet_id, err := getSubnetID(auth, config_reader.Cfg)
-		if err != nil {
-			return err
-		}
-
-		addresses, err := getIPAddressesBySubnetID(subnet_id, auth, config_reader.Cfg)
+		addresses, err := getIPAddressesBelongsToSubnets(auth, config_reader.Cfg)
 		if err != nil {
 			return err
 		}
