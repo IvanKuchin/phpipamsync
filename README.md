@@ -87,7 +87,7 @@ ip dhcp pool fridge
  default-router 192.168.251.1
 !
 ip dhcp pool tesla
- host 192.168.168.49 255.255.255.0
+ host 192.168.251.49 255.255.255.0
  client-identifier 014c.fcaa.8ec6.62
  default-router 192.168.251.1
 !
