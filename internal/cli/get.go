@@ -29,11 +29,7 @@ func getSubnetID(client api_client.Authenticator, cfg *config_reader.Config, sub
 		return subnet_id, err
 	}
 
-	subnet_id, err = strconv.Atoi(subnets.Subnets[0].Id)
-	if err != nil {
-		log.Printf("Error converting subnet id to int: %s", err.Error())
-		return subnet_id, err
-	}
+	subnet_id = subnets.Subnets[0].Id
 
 	return subnet_id, nil
 }
@@ -82,7 +78,7 @@ func getPiHoleCustomOutput(addresses IPAddresses, cfg *config_reader.Config) str
 
 	for _, address := range addresses.IPAddresses {
 		switch address.Tag {
-		case "2": // In Use
+		case 2: // In Use
 			if address.Hostname == "" {
 				log.Printf("WARNING: Skipping %s because hostname is empty", address.IP)
 			} else if address.IP == "" {
@@ -90,10 +86,10 @@ func getPiHoleCustomOutput(addresses IPAddresses, cfg *config_reader.Config) str
 			} else {
 				output += address.IP + " " + address.Hostname + "." + cfg.Domain + "\n"
 			}
-		case "3": // Reserved
-		case "4": // DHCP pool
+		case 3: // Reserved
+		case 4: // DHCP pool
 		default:
-			log.Printf("WARNING: Skipping %s because tag is %s", address.IP, address.Tag)
+			log.Printf("WARNING: Skipping %s because tag is %v", address.IP, address.Tag)
 		}
 	}
 
@@ -170,7 +166,7 @@ func getCiscoDHCPOutputBySubnet(addresses IPAddresses, subnet string) (string, e
 
 	for _, address := range addresses.IPAddresses {
 		switch address.Tag {
-		case "2": // In Use
+		case 2: // In Use
 			if address.Hostname == "" {
 				log.Printf("WARNING: Skipping %s because hostname is empty", address.IP)
 			} else if address.IP == "" {
@@ -187,10 +183,10 @@ func getCiscoDHCPOutputBySubnet(addresses IPAddresses, subnet string) (string, e
 				output += " default-router " + gw + "\n"
 				output += "!\n"
 			}
-		case "3": // Reserved
-		case "4": // DHCP pool
+		case 3: // Reserved
+		case 4: // DHCP pool
 		default:
-			log.Printf("WARNING: Skipping %s because tag is %s", address.IP, address.Tag)
+			log.Printf("WARNING: Skipping %s because tag is %v", address.IP, address.Tag)
 		}
 	}
 
