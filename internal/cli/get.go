@@ -89,7 +89,7 @@ func getPiHoleCustomOutput(addresses IPAddresses, cfg *config_reader.Config) str
 		case 3: // Reserved
 		case 4: // DHCP pool
 		default:
-			log.Printf("WARNING: Skipping %s because tag is %s", address.IP, address.Tag)
+			log.Printf("WARNING: Skipping %s because tag is %v", address.IP, address.Tag)
 		}
 	}
 
@@ -186,7 +186,7 @@ func getCiscoDHCPOutputBySubnet(addresses IPAddresses, subnet string) (string, e
 		case 3: // Reserved
 		case 4: // DHCP pool
 		default:
-			log.Printf("WARNING: Skipping %s because tag is %s", address.IP, address.Tag)
+			log.Printf("WARNING: Skipping %s because tag is %v", address.IP, address.Tag)
 		}
 	}
 
