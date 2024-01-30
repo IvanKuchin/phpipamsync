@@ -2,6 +2,10 @@
 
 Small script synchronizes phpipam hosts with pi-hole resolvers. 
 
+## Requirement
+
+phpipam v1.6 and above
+
 ## Use case
 
 Phpipam considered to be a source of truth for DNS resolution. 
