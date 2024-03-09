@@ -55,6 +55,10 @@ func getIPAddressesBelongsToSubnets(client api_client.Authenticator, cfg *config
 
 	addresses := IPAddresses{}
 
+	if len(cfg.Ipam_subnets) == 0 {
+		return addresses, fmt.Errorf("no subnets defined in config file")
+	}
+
 	for _, subnet := range cfg.Ipam_subnets {
 
 		subnet_id, err := getSubnetID(client, config_reader.Cfg, subnet)
@@ -195,6 +199,10 @@ func getCiscoDHCPOutputBySubnet(addresses IPAddresses, subnet string) (string, e
 
 func getCiscoDHCPOutput(client api_client.Authenticator, cfg *config_reader.Config) (string, error) {
 	output := ""
+
+	if len(cfg.Ipam_subnets) == 0 {
+		return "", fmt.Errorf("no subnets defined in config file")
+	}
 
 	for _, subnet := range cfg.Ipam_subnets {
 
