@@ -24,15 +24,15 @@ type IPAddress struct {
 	Owner                 string `json:"owner"`
 	Tag                   int    `json:"tag"`
 	DeviceID              int    `json:"deviceId"`
-	Location              string `json:"location"`
+	Location              int    `json:"location"`
 	Port                  string `json:"port"`
 	Note                  string `json:"note"`
 	LastSeen              string `json:"lastSeen"`
 	ExcludePing           int    `json:"excludePing"`
 	PTRignore             int    `json:"PTRignore"`
-	Ptr                   string `json:"PTR"`
+	Ptr                   int    `json:"PTR"`
 	FirewallAddressObject string `json:"firewallAddressObject"`
 	EditDate              string `json:"editDate"`
-	CustomerID            string `json:"customer_id"`
+	CustomerID            int    `json:"customer_id"`
 	ClientIdentifier      string `json:"custom_ClientID"`
 }
